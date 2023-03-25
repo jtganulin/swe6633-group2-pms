@@ -18,17 +18,19 @@ const register = async (req, res) => {
     }
     
     // if user does not exist, create user with body of request
-    await User.create({
+    const user = await User.create({
       name: name,
       email: email,
       password: password
     })
     
-    // test response with name and email
-    res.json({
-      name,
-      email
-    })
+    // save user id in cookie session
+    if (user) {
+      req.session.user = user._id.toString();
+    } 
+
+    // test response with name and Email
+    res.sendStatus(201);
 
   } catch (err) {
     console.log(err);
@@ -54,11 +56,11 @@ const login = async (req, res) => {
     // if user exists, call compare password method on user model with password from request
     if (await user.isValidPassword(password)) {
       
+      // set user id in cookie
+      req.session.user = user._id.toString();
+
       // success
-      res.json({
-        email: user.email,
-        name: user.name
-      })
+      res.sendStatus(200); 
 
     } else {
       
@@ -76,7 +78,38 @@ const login = async (req, res) => {
 
 }
 
+const getMe = async (req, res) => {
+
+  try {
+
+    if (req.session.user) {
+      const user = await User.findById(req.session.user);
+      if (user) {
+        res.json({
+          name: user.name,
+          email: user.email
+        })
+      }
+      
+      res.sendStatus(404);
+      throw new Error('Not Authorized');
+    } else {
+
+      res.sendStatus(404);
+      throw new Error('No cookie'); // change later
+
+    }
+
+  } catch(err) {
+
+    console.log(err);
+  
+  }
+
+}
+
 module.exports = {
   register,
-  login
+  login,
+  getMe
 }
