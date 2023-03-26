@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const userSchema = require('../User/UserModel').userSchema;
-
 // create schema for effort
 const effortSchema = mongoose.Schema({
   effortType: {
@@ -53,12 +51,25 @@ const totalTimeEffort = mongoose.Schema({
   testing: Number,
   projectManagement: Number
 })
+// create schema for project owner
+const ownerSchema = mongoose.Schema({
+  ownerId: mongoose.Types.ObjectId,
+  email: String,
+  name: String
+})
+
+const memberSchema = mongoose.Schema({
+  ownerId: mongoose.Types.ObjectId,
+  name: String,
+  email: String,
+  role: String
+})
 
 // create schema for overall project
 const projectSchema = mongoose.Schema({
 
-  // give owner the user schema imported from '../User/UserModel.js'
-  owner: userSchema, 
+  // use owner schema above, complications with actual User Schema so do this instead
+  owner: ownerSchema, 
   
   // give project a title
   title: {
@@ -72,7 +83,7 @@ const projectSchema = mongoose.Schema({
   },
 
   // give project a list of members with array of userSchema
-  members: [userSchema],
+  members: [memberSchema],
 
   // give project a list of risks with arra of riskSchema
   risk: [riskSchema],
@@ -84,3 +95,5 @@ const projectSchema = mongoose.Schema({
   nonFuncReq: [requirementSchema]
 
 })
+
+module.exports = mongoose.model('Project', projectSchema);

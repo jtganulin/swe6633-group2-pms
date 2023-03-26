@@ -28,6 +28,7 @@ app.use(session({
 }))
 
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/projects', require('./routes/projectRoutes'));
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
