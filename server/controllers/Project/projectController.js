@@ -1,5 +1,6 @@
 const Project = require('../../models/Project/ProjectModel');
 const ObjectId = require('mongoose').Types.ObjectId;
+const { setRequirement } = require('./setRequirements');
 
 const setProject = async (req, res) => {
 
@@ -8,9 +9,8 @@ const setProject = async (req, res) => {
     const { _id, name, email } = req.user;
   
 
-    const { title, desc } = req.body;
-  
-
+    const { title, desc, funcReq, nonFuncReq } = req.body;
+    
     const project = await Project.create({
       owner: {
         ownerId: _id,
@@ -18,7 +18,9 @@ const setProject = async (req, res) => {
         email: email
       },
       title: title,
-      desc: desc
+      desc: desc,
+      funcReq: setRequirement(funcReq),
+      nonFuncReq: setRequirement(nonFuncReq)
     })
     
     if (project) {
