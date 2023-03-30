@@ -1,4 +1,3 @@
-
 const setRequirement = (requirements) => {
 
   if (requirements !== undefined) {
@@ -19,6 +18,22 @@ const setRequirement = (requirements) => {
 
 }
 
+
+const setRisks = (risks) => {
+
+  if (risks !== undefined) {
+    return [...{
+      name: riskName,
+      content: riskContent,
+      status: riskStatus
+    }] = risks;
+  }
+
+  return [];
+
+}
+
 module.exports = {
-  setRequirement
+  setRequirement,
+  setRisks
 }

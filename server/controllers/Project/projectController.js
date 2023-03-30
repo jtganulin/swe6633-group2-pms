@@ -1,17 +1,23 @@
 const Project = require('../../models/Project/ProjectModel');
 const ObjectId = require('mongoose').Types.ObjectId;
-const { setRequirement } = require('./setRequirements');
+const {
+  setRequirement,
+  setRisks
+} = require('./projectService');
 
 const setProject = async (req, res) => {
 
   try {
 
+    // destructure object from auth middleware / cookie
     const { _id, name, email } = req.user;
-  
-
-    const { title, desc, funcReq, nonFuncReq } = req.body;
     
+    // destructure data from user/client
+    const { title, desc, risk, funcReq, nonFuncReq } = req.body;
+   
+    // create project in db
     const project = await Project.create({
+      // assign owner with data from auth middleware / cookie
       owner: {
         ownerId: _id,
         name: name,
@@ -19,6 +25,7 @@ const setProject = async (req, res) => {
       },
       title: title,
       desc: desc,
+      risk: setRisks(risk),
       funcReq: setRequirement(funcReq),
       nonFuncReq: setRequirement(nonFuncReq)
     })
@@ -59,7 +66,54 @@ const getProjects = async (req, res) => {
 
 }
 
+const updateProjects = async (req, res) => {
+
+  try {
+
+    const project = await Project.findByIdAndUpdate(new ObjectId(req.params.id), req.body, {new: true}); 
+    if (project) {
+      res.json(project);
+    } else {
+      res.sendStatus(400);
+      throw new Error('Unable to save');
+    }
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+}
+
+
+const deleteProjects = async (req, res) => {
+
+  try {
+
+    const project = await Project.findById(new ObjectId(req.params.id))
+    
+    if (project) {
+      await Project.findByIdAndDelete(project.id); 
+      res.status(200).json({project_id: project.id})
+    } else {
+      res.sendStatus(400);
+      throw new Error('Cannot delete project')
+
+    }
+    
+    
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+}
+
 module.exports = {
   setProject,
-  getProjects
+  getProjects,
+  deleteProjects,
+  updateProjects
 }
