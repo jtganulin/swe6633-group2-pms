@@ -8,9 +8,10 @@ const {
 } = require('../controllers/Project/projectController');
 const protect = require('../middleware/authMiddleware');
 
-router.post('/', protect, setProject);
-router.get('/getProjects', protect, getProjects);
+router.get('/projects', protect, getProjects);
+router.post('/project', protect, setProject);
+// router.get('/project/:id', protect, getProject);
 router.delete('/project/:id', protect, deleteProjects);
-router.put('/update-project/:id', protect, updateProjects);
+router.put('/project/:id', protect, updateProjects);
 
 module.exports = router;

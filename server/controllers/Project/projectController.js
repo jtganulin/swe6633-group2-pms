@@ -28,13 +28,14 @@ const setProject = async (req, res) => {
       risk: setRisks(risk),
       funcReq: setRequirement(funcReq),
       nonFuncReq: setRequirement(nonFuncReq)
-    })
+    });
+
+    await project.save();
     
     if (project) {
-      res.json(project);
+      return res.status(201).json(project);
     } else {
-      res.sendStatus(400);
-      throw new Error('Unable to create project');
+      return res.status(500).json({ message: 'Unable to save project' });
     }
 
   } catch (err) {
@@ -52,10 +53,9 @@ const getProjects = async (req, res) => {
     const projects = await Project.find();
 
     if (projects) {
-      res.json(projects.filter( project => new ObjectId(project.owner.ownerId).equals(user._id)));
+      return res.json(projects.filter( project => new ObjectId(project.owner.ownerId).equals(user._id)));
     } else {
-      res.sendStatus(404);
-      throw new Error('Not found');
+      return res.status(404).json({ message: 'Unable to find projects' });
     }
 
   } catch(err) {
@@ -70,12 +70,13 @@ const updateProjects = async (req, res) => {
 
   try {
 
-    const project = await Project.findByIdAndUpdate(new ObjectId(req.params.id), req.body, {new: true}); 
+    const project = await Project.findByIdAndUpdate(new ObjectId(req.params.id), req.body, { new: true });
+    await project.save();
+
     if (project) {
-      res.json(project);
+      return res.json(project);
     } else {
-      res.sendStatus(400);
-      throw new Error('Unable to save');
+      return res.status(500).json({ message: 'Unable to update project' });
     }
   } catch (err) {
 
@@ -94,14 +95,10 @@ const deleteProjects = async (req, res) => {
     
     if (project) {
       await Project.findByIdAndDelete(project.id); 
-      res.status(200).json({project_id: project.id})
+      res.status(200).json({ project_id: project.id });
     } else {
-      res.sendStatus(400);
-      throw new Error('Cannot delete project')
-
+      res.status(404).json({ message: 'Project not found' });
     }
-    
-    
 
   } catch (err) {
 
