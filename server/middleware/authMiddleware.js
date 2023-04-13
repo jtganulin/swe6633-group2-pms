@@ -12,7 +12,7 @@ const protect = async (req, res, next) => {
     return next();
   }
 
-  res.sendStatus(401);
+  res.status(401).json({ error: 'Not authorized, please login to access this resource' });
 
 }
 
