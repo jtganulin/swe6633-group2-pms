@@ -59,7 +59,7 @@ const ownerSchema = mongoose.Schema({
 })
 
 const memberSchema = mongoose.Schema({
-  ownerId: mongoose.Types.ObjectId,
+  memberId: mongoose.Types.ObjectId,
   name: String,
   email: String,
   role: String

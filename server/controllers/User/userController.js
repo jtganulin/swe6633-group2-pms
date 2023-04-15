@@ -5,7 +5,7 @@ const register = async (req, res) => {
   try {
     
     // destructure name, email, and password from req.body object
-    const { name, email, password } = req.body; 
+    const { name, email, password, role } = req.body; 
 
     // check if email exists 
     const userExists = await User.findOne({ email });
@@ -21,7 +21,8 @@ const register = async (req, res) => {
     const user = await User.create({
       name: name,
       email: email,
-      password: password
+      password: password,
+      role: role
     })
     
     // save user id in cookie session
