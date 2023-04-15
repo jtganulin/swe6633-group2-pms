@@ -25,7 +25,7 @@ export default function NavBar(props) {
     const navigate = useNavigate();
 
     return (
-        <Flex minWidth='max-content' boxShadow="1px 0 7px 1px black" alignItems='center' p='1em' gap='2' bg={'#cccccc'}>
+        <Flex minWidth='max-content' boxShadow="1px 0 7px 1px black" alignItems='center' p='1em' gap='2' bg={'#cccccc'} position={'sticky'} top={0}>
             <Box p='2'>
                 <Heading size='md'>Project MGMT System</Heading>
             </Box>
