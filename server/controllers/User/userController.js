@@ -25,8 +25,9 @@ const register = async (req, res) => {
     const user = await User.create({
       name: name,
       email: email,
-      password: password
-    });
+      password: password,
+      role: role
+    })
 
     // save user to database
     await user.save();

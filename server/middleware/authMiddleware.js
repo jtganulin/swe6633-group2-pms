@@ -20,4 +20,17 @@ const protect = async (req, res, next) => {
 
 }
 
-module.exports = protect;
+const admin = async (req, res, next) => {
+
+  if (req.user && req.user.role === 'Project-Manager') {
+    return next();
+  }
+
+  res.sendStatus(401);
+
+}
+
+module.exports = {
+  protect,
+  admin
+};

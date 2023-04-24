@@ -7,7 +7,10 @@ const {
   deleteProject,
   updateProject
 } = require('../controllers/Project/projectController');
-const protect = require('../middleware/authMiddleware');
+const {
+  protect,
+  admin
+} = require('../middleware/authMiddleware');
 
 router.get('/projects', protect, getProjects);
 router.post('/project', protect, setProject);
