@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../providers/UserProvider";
 import axios from "axios";
+import toast from "react-hot-toast";
 import {
     Box,
     VStack,
@@ -153,16 +154,17 @@ export default function Projects(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // Filter out risks and requirements that are completely empty
         const formData = {
             title: formState.title,
             desc: formState.desc,
-            risk: formState.risk,
-            funcReq: formState.funcReq,
-            nonFuncReq: formState.nonFuncReq,
+            risk: formState.risk.filter((risk) => risk.name !== "" && risk.content !== "" && risk.status !== ""),
+            funcReq: formState.funcReq.filter((req) => req.name !== "" && req.content !== ""),
+            nonFuncReq: formState.nonFuncReq.filter((req) => req.name !== "" && req.content !== ""),
         };
-        await axios.post("/api/projects/project", formData).then((res) => {
+        await axios.post("/api/project/", formData).then((res) => {
             if (res.status === 201) {
-                alert("Project created successfully!")
+                toast.success("Project created successfully!");
                 navigate("/projects");
             } else {
                 setFormState({

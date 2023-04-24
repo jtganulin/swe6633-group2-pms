@@ -8,6 +8,10 @@ const effortSchema = mongoose.Schema({
   timeCost: {
     type: Number,
     required: [true, 'Please input the time costed for this effort']
+  },
+  forRequirement: {
+    type: String,
+    required: [true, 'Please indicate which requirement this effort is for']
   }
 })
 
@@ -26,8 +30,7 @@ const requirementSchema = mongoose.Schema({
     required: [true, 'Please add Content for the Requirement']
   },
   effort: [effortSchema]
-
-})
+});
 
 // create schema for risks
 const riskSchema = mongoose.Schema({
@@ -59,7 +62,7 @@ const ownerSchema = mongoose.Schema({
 })
 
 const memberSchema = mongoose.Schema({
-  ownerId: mongoose.Types.ObjectId,
+  // ownerId: mongoose.Types.ObjectId,
   name: String,
   email: String,
   role: String

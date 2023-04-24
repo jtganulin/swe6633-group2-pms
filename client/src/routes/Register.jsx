@@ -43,28 +43,17 @@ export default function Register() {
             const { data } = response;
             updateUser({
                 loggedIn: true,
-                name: data.name,
-                email: data.email,
+                name: data?.name,
+                email: data?.email,
             });
 
         } catch (error) {
-            let errorMessage = "An error occurred while registering. Please try again later.";
-
-            if (error.response) {
-                const responseData = error.response.data;
-                if (responseData && responseData.errors) {
-                    errorMessage = responseData.errors;
-                }
-            } else if (error.request) {
-                errorMessage = "No response received from the server.";
-            }
-
-            console.log(errorMessage);
+            console.log(JSON.stringify(error));
             setFormState((prevState) => ({
                 ...prevState,
                 errors: {
                     ...prevState.errors,
-                    general: errorMessage,
+                    general: error.response?.data?.error || error.message,
                 },
             }));
         }

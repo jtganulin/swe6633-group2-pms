@@ -6,8 +6,12 @@ const protect = async (req, res, next) => {
   if (req.session.user) {
     
     const { user } = req.session;
-
-    req.user = await User.findById(new mongoose.Types.ObjectId(user)).select('-password').exec();
+    try {
+      req.user = await User.findById(new mongoose.Types.ObjectId(user)).select('-password').exec();
+    } catch (err) {
+      console.log(err);
+      return res.status(401).json({ error: 'Not authorized, please login to access this resource' });
+    }
 
     return next();
   }
