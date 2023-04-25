@@ -35,11 +35,22 @@ const setProject = async (req, res) => {
     if (project) {
       return res.status(201).json(project);
     } else {
-      return res.status(500).json({ message: 'Unable to save project' });
+      return res.status(400).json({
+        errors: {
+          general: 'Project creation failed'
+        }
+      });
     }
-
   } catch (err) {
     console.log(err);
+    const errors = {};
+    for (const [key, value] of Object.entries(err.errors)) {
+      errors[key] = value.message;
+    }
+
+    return res.status(400).json({
+      errors: errors
+    });
   }
 
 }
@@ -86,14 +97,18 @@ const getProjects = async (req, res) => {
       console.log("Projects found: " + projects.length);
       return res.json(projects);
     } else {
-      console.log("Projects not found");
       return res.status(404).json({ message: 'Unable to find projects' });
     }
-
   } catch (err) {
-
     console.log(err);
+    const errors = {};
+    for (const [key, value] of Object.entries(err.errors)) {
+      errors[key] = value.message;
+    }
 
+    return res.status(400).json({
+      errors: errors
+    });
   }
 
 }
@@ -102,20 +117,30 @@ const updateProject = async (req, res) => {
 
   try {
 
-    const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const project = await Project.findByIdAndUpdate(req.params.id, {
+      title: req.body?.title,
+      desc: req.body?.desc,
+      risk: setRisks(req.body?.risk),
+      funcReq: setRequirement(req.body?.funcReq),
+      nonFuncReq: setRequirement(req.body?.nonFuncReq),
+      members: req.body?.members 
+    }, { new: true });
     await project.save();
 
     if (project) {
       return res.json(project);
     } else {
-      return res.status(500).json({ message: 'Unable to update project' });
+      return res.status(404).json({ errors: { general: 'Unable to find project' } });
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).json({
-      errors: {
-        general: 'Couldn\'t update project, please try again later'
-      }
+    const errors = {};
+    for (const [key, value] of Object.entries(err.errors)) {
+      errors[key] = value.message;
+    }
+
+    return res.status(400).json({
+      errors: errors
     });
   }
 
@@ -132,15 +157,17 @@ const deleteProject = async (req, res) => {
       await Project.findByIdAndDelete(project.id);
       return res.status(200).json({ project_id: project.id });
     } else {
-      return res.status(404).json({ message: 'Project not found' });
+      return res.status(404).json({ errors: { general: 'Unable to find project' } });
     }
-
   } catch (err) {
     console.log(err);
-    return res.status(500).json({
-      errors: {
-        general: 'Couldn\'t delete project, try again later'
-      }
+    const errors = {};
+    for (const [key, value] of Object.entries(err.errors)) {
+      errors[key] = value.message;
+    }
+
+    return res.status(400).json({
+      errors: errors
     });
   }
 

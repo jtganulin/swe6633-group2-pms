@@ -1,4 +1,4 @@
-import { Box, VStack, FormControl, FormLabel, Input, Textarea, Button, IconButton, CloseIcon } from "@chakra-ui/react";
+import { Box, VStack, FormControl, FormLabel, Heading, Input, Textarea, Button, IconButton, CloseIcon } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -25,7 +25,6 @@ function ViewProjectDetails(props) {
                 try {
                     const res = await axios.get(`/api/project/${projectId}`);
                     const { data } = res;
-                    console.log(data)
                     setFormState((prevState) => ({
                         ...prevState,
                         _id: data?._id,
@@ -53,6 +52,9 @@ function ViewProjectDetails(props) {
 
     return (
         <Box p={6}>
+            <Heading as="h1" size="lg" mb={6}>
+                View Project Details
+            </Heading>
             <VStack spacing={6} align="stretch">
                 <FormControl isDisabled>
                     <FormLabel>Title</FormLabel>
@@ -95,8 +97,8 @@ function ViewProjectDetails(props) {
                     ))}
                 </FormControl>
                 <Button onClick={() => navigate(`/projects/${projectId}/edit`)}>Edit</Button>
-                <Link to={`/projects/${formState._id}/members`}>View Project Members</Link>
-                <Link to="/projects">Back to Projects</Link>
+                <Link style={{ color: "blue" }} to={`/projects/${formState._id}/members`}>View Project Members</Link>
+                <Link style={{ color: "blue" }} to="/projects">Back to Projects</Link>
             </VStack>
         </Box>
     );

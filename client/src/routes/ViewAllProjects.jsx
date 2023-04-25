@@ -52,7 +52,6 @@ export default function ViewAllProjects(props) {
 
 const ProjectsContainer = (props) => {
     const projects = props.projects || [];
-    console.log(projects)
     return (
         <Flex grow="1">
             <SimpleGrid minChildWidth="200px" spacing="1.25em">

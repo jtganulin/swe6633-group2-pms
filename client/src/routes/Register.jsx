@@ -9,7 +9,8 @@ import {
     Input,
     Button,
     FormErrorMessage,
-    Text
+    Text,
+    Select
 } from "@chakra-ui/react";
 
 export default function Register() {
@@ -125,6 +126,16 @@ export default function Register() {
                     value={formState.confirmPassword}
                     onChange={handleChange}
                 />
+            </FormControl>
+            <FormControl isRequired isInvalid={!!formState.errors.role}>
+                <FormLabel>Role</FormLabel>
+                <Select name="role" id="role" value={formState.role} onChange={handleChange}>
+                    <option value="project-manager">Project Manager</option>
+                    <option value="developer">Developer</option>
+                    <option value="designer">Designer</option>
+                    <option value="tester">Tester</option>
+                    <option value="analyst">Analyst</option>
+                </Select>
             </FormControl>
             {Object.keys(formState.errors).length > 0 && Object.values(formState.errors).map((error, index) => (
                 <FormErrorMessage key={index}>{error}</FormErrorMessage>

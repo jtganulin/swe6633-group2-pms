@@ -49,10 +49,11 @@ function App() {
           name: data.name,
           email: data.email,
         });
+        
         navigate('/projects');
       })
       .catch((error) => {
-        console.log(error);
+        console.log("Frontend getMe error" + error);
         // logout(); // Clear any session cookies and navigate to login page
       });
   }, []);
