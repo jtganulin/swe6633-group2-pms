@@ -3,12 +3,16 @@ const mongoose = require('mongoose');
 const effortSchema = mongoose.Schema({
   effortType: {
     type: String,
+    enum: {
+      values: ['reqAnalysis', 'design', 'coding', 'testing', 'projectManagement'],
+      message: 'Please indicate which type of effort this is'
+    },
     required: [true, 'Please indicate which type of effort this is']
   },
   timeCost: {
     type: Number,
     required: [true, 'Please input the time costed for this effort']
-  }
+  },
 })
 
 // create schema for requirements
@@ -26,8 +30,7 @@ const requirementSchema = mongoose.Schema({
     required: [true, 'Please add Content for the Requirement']
   },
   effort: [effortSchema]
-
-})
+});
 
 // create schema for risks
 const riskSchema = mongoose.Schema({
@@ -51,6 +54,7 @@ const totalTimeEffortSchema = mongoose.Schema({
   testing: Number,
   projectManagement: Number
 })
+
 // create schema for project owner
 const ownerSchema = mongoose.Schema({
   ownerId: mongoose.Types.ObjectId,

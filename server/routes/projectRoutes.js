@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const {
+  getProject,
   setProject,
   getProjects,
-  deleteProjects,
-  updateProjects
+  deleteProject,
+  updateProject
 } = require('../controllers/Project/projectController');
 const {
   protect,
@@ -13,8 +14,8 @@ const {
 
 router.get('/projects', protect, getProjects);
 router.post('/project', protect, setProject);
-// router.get('/project/:id', protect, getProject);
-router.delete('/project/:id', protect, deleteProjects);
-router.put('/project/:id', protect, updateProjects);
+router.get('/project/:id', protect, getProject);
+router.delete('/project/:id', protect, deleteProject);
+router.put('/project/:id', protect, updateProject);
 
 module.exports = router;

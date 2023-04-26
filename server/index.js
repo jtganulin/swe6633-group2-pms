@@ -1,9 +1,8 @@
+require('dotenv').config();
 const express = require('express');
-const dotenv = require('dotenv').config();
 const connectDB = require('./config/db');
 const session = require('express-session');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const path = require('path');
 /* const https = require('https');
@@ -47,18 +46,20 @@ app.use(session({
   }
 }))
 
-// Output info on the incoming request
-app.use((req, res, next) => {
-  console.log(`Request: ${req.method} ${req.url}`);
-  console.log(`Session: ${req.session.user}`)
-  console.log(`Cookies: ${req.cookies}`)
-  console.log(`Body: ${JSON.stringify(req.body)}`)
-  res.header('Access-Control-Allow-Origin', allowedOrigins);
-  next();
-});
+if (process.env.NODE_ENV === "development") {
+  // Output info on the incoming request
+  app.use((req, res, next) => {
+    console.log(`Request: ${req.method} ${req.url}`);
+    console.log(`Session: ${req.session.user}`)
+    console.log(`Cookies: ${req.cookies}`)
+    console.log(`Body: ${JSON.stringify(req.body)}`)
+    // res.header('Access-Control-Allow-Origin', allowedOrigins);
+    next();
+  });
+}
 
 app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/projects', require('./routes/projectRoutes'));
+app.use('/api/', require('./routes/projectRoutes'));
 
 // Serve static assets in production
 /* app.use(express.static(path.join(__dirname, '../client/build')));
@@ -76,5 +77,5 @@ app.use("*", (req, res) => {
   }); */
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Express server listening on port ${port}`);
 });
