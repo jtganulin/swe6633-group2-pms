@@ -44,7 +44,7 @@ const riskSchema = mongoose.Schema({
 })
 
 // create schema for totalTime and Effort
-const totalTimeEffort = mongoose.Schema({
+const totalTimeEffortSchema = mongoose.Schema({
   reqAnalysis: Number,
   design: Number,
   coding: Number,
@@ -92,7 +92,26 @@ const projectSchema = mongoose.Schema({
   funcReq: [requirementSchema],
 
   // give project a list of non-functional requirements with array of requirementSchema
-  nonFuncReq: [requirementSchema]
+  nonFuncReq: [requirementSchema],
+
+  totalEffort: totalTimeEffortSchema
+
+})
+
+projectSchema.pre('save', async function(next) {
+  
+  const map = new Map();
+
+  let [ effort ] = this.funcReq;
+
+  this.funcReq.forEach((effort) => {
+    effort.forEach((eff) => {
+      map.set(eff.effortType, map.get(eff.effortType) + eff.timeCost || eff.timeCost);
+    })
+  })
+
+  this.nonFuncReq;
+
 
 })
 
