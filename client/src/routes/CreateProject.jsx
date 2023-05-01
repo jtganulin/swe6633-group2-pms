@@ -162,7 +162,7 @@ export default function Projects(props) {
             funcReq: formState.funcReq.filter((req) => req.name !== "" && req.content !== ""),
             nonFuncReq: formState.nonFuncReq.filter((req) => req.name !== "" && req.content !== ""),
         };
-        await axios.post("/api/project/", formData).then((res) => {
+        await axios.post("/api/project/", formData, {withCredentials: true}).then((res) => {
             if (res.status === 201) {
                 toast.success("Project created successfully!");
                 navigate("/projects");
@@ -171,6 +171,7 @@ export default function Projects(props) {
                     ...formState,
                     errors: res.data,
                 });
+                toast.error(res.data);   
             }
         }).catch((err) => {
             console.log(err);
@@ -178,6 +179,7 @@ export default function Projects(props) {
                 ...formState,
                 errors: err.message || err,
             });
+            toast.error(err.message);
         });
     };
 

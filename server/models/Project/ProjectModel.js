@@ -102,21 +102,4 @@ const projectSchema = mongoose.Schema({
 
 })
 
-projectSchema.pre('save', async function(next) {
-  
-  const map = new Map();
-
-  let [ effort ] = this.funcReq;
-
-  this.funcReq.forEach((effort) => {
-    effort.forEach((eff) => {
-      map.set(eff.effortType, map.get(eff.effortType) + eff.timeCost || eff.timeCost);
-    })
-  })
-
-  this.nonFuncReq;
-
-
-})
-
 module.exports = mongoose.model('Project', projectSchema);
