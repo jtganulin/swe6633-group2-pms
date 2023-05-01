@@ -1,49 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Box } from '@chakra-ui/react';
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, RadarChart, Radar, Legend, ResponsiveContainer, PieChart, Pie } from 'recharts';
+import { Box, VStack, Heading } from '@chakra-ui/react';
+import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, RadarChart, Radar, Legend, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 
-const testReq = [
-  {
-    effort: [
-      {
-        effortType: "reqAnalysis",
-        timeCost: 3
-      },
-      {
-        effortType: "coding",
-        timeCost: 3
-      },
-      {
-        effortType: "projectManagement",
-        timeCost: 3
-      },
-      {
-        effortType: "design",
-        timeCost: 3
-      }
-    ]
-  },
-  {
-    effort: [
-      {
-        effortType: "reqAnalysis",
-        timeCost: 3
-      },
-      {
-        effortType: "coding",
-        timeCost: 3
-      },
-      {
-        effortType: "projectManagement",
-        timeCost: 3
-      },
-      {
-        effortType: "design",
-        timeCost: 3
-      }
-    ]
-  }
-]
 
 const Chart = (props) => {
 
@@ -52,85 +10,71 @@ const Chart = (props) => {
   const [data, setData] = useState([
     {
       "type": "reqAnalysis",
-      "functional": 0,
-      "non functional": 0,
+      "name": "Requirements Analysis",
+      "value": 0,
       "fullMark": 500
     },
     {
       "type": "design",
-      "functional": 0,
-      "non functional": 0,
+      "name": "Design",
+      "value": 0,
       "fullMark": 500
     },
     {
       "type": "coding",
-      "functional": 0,
-      "non functional": 0,
+      "name": "Coding",
+      "value": 0,
       "fullMark": 500
     },
     {
       "type": "testing",
-      "functional": 0,
-      "non functional": 0,
+      "name": "Testing",
+      "value": 0,
       "fullMark": 500
     },
     {
       "type": "projectManagement",
-      "functional": 0,
-      "non functional": 0,
+      "name": "Project Management",
+      "value": 0,
       "fullMark": 500
     }
   ]);
 
-  const [functional, setFunctional] = useState([]);
-  const [nonFunctional, setNonFunctional] = useState([]);
-  
-  function getData() {
-  
-    project?.funqReq?.forEach((item) => {
-      item?.effort?.forEach((effort) => {
-
-        const { effortType, timeCost } = effort;
-
-        const matchingObject = data.find((data) => data.type === effortType);
-
-        if (matchingObject) {
-          matchingObject.functional += timeCost;
-        }
-
-        setData((prevState) => [...prevState]);
-
-      })
-    })
-
-    project?.nonFuncReq?.forEach((item) => {
-      item?.effort?.forEach((effort) => {
-  
-        const { effortType, timeCost } = effort;
-
-        const matchingObject = data.find((data) => data.type === effortType);
-
-        if (matchingObject) {
-          matchingObject.functional += timeCost;
-        }
-
-        setData((prevState) => [...prevState]);
-
-      })
-    })
-
+  function getData(project) {
+    // First get the project's totalEffort, which has nested keys pertaining to each type of effort
+    const totalEffort = project?.totalEffort;
+    // Then loop through the data array and set the value of each type of effort to the value of the totalEffort
+    const newData = data.map(d => {
+      d.value = totalEffort[d.type];
+      return d;
+    });
+    // Set the data state to the new data
+    setData(newData);
   }
 
   useEffect(() => {
-    getData();
-  },[])
+    getData(project);
+  }, [])
 
   return (
     <ResponsiveContainer width={'80%'} height={300}>
+      {/* <Box> */}
+      {/* <Heading as="h2" size="lg">Effort Breakdown</Heading> */}
       <PieChart>
-        <Pie data={data} dataKey="type" nameKey="functional" cx="50%" cy="50%" outerRadius={50} fill="#8884d8" />
-        <Pie data={data} dataKey="type" nameKey="non-functional" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label />
-      </PieChart>
+        <Pie data={data} nameKey="name" dataKey="value" cx="50%" cy="50%"
+          outerRadius={40} fill="#8884d8" labelLine={false} labelFontSize={8}
+          label={({ name, value }) => `${value} hrs`}
+          isAnimationActive={(name, value) => value > 0}> {/* Hides labels without values */}
+          <Cell fill="#C19AB7" />
+          <Cell fill="#9C95DC" />
+          <Cell fill="#228CDB" />
+          <Cell fill="#0B7189" />
+          <Cell fill="#170A1C" />
+        </Pie>
+        {/* <Tooltip formatter={(value, name) => `${value} hrs`} /> */}
+        <Legend />
+        </PieChart>
+      {/* </Box> */}
     </ResponsiveContainer>
   )
 

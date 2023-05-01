@@ -34,6 +34,7 @@ export default function EditProject(props) {
                     }));
                 } catch (error) {
                     console.log(JSON.stringify(error));
+                    toast.error("Error getting project details.");
                     setFormState((prevState) => ({
                         ...prevState,
                         errors: {
@@ -121,11 +122,12 @@ export default function EditProject(props) {
             }
         }).catch((err) => {
             console.log(err);
+            toast.error("Error updating project, please check your inputs.");
             setFormState((prevState) => ({
                 ...prevState,
                 errors: {
                     ...prevState.errors,
-                    general: err.response?.data?.error || err.message,
+                    ...err.response.data?.errors
                 },
             }));
         });
@@ -160,9 +162,9 @@ export default function EditProject(props) {
                 Edit Project
             </Heading>
             <form onSubmit={handleSubmit}>
-                {formState.errors?.general && (
+                {formState?.errors && (
                     <FormControl>
-                        <FormLabel color="red.500" bg="white">{formState.errors?.general}</FormLabel>
+                        <FormLabel color="red.500" bg="white">{JSON.stringify(formState?.errors)}</FormLabel>
                     </FormControl>
                 )}
 

@@ -113,17 +113,62 @@ const getProjects = async (req, res) => {
 
 }
 
+const updateProjectEffort = async (req, res) => {
+  // Takes in project ID and requirement ID, as well as the new effort value
+  // Updates the effort value of the requirement
+  // Returns the updated project
+  try {
+    const project = await Project.findById(req.params.id);
+    if (project) {
+      // Determine the type of requirement
+      const effortType = req.body?.effortType;
+      const timeCost = req.body?.timeCost;
+      const reqId = req.body?.reqId;
+
+      // Find the requirement by ID
+      // Search both non-functional and functional requirements
+      const requirement = project.funcReq.find(req => req._id == reqId)
+        || project.nonFuncReq.find(req => req._id == reqId);
+
+      // Check if the requirement exists in the project
+      if (!requirement) {
+        console.log("Unable to find requirement " + reqId);
+        return res.status(404).json({ message: 'Unable to find requirement' });
+      }
+
+      console.log("Found req: " + JSON.stringify(requirement));
+
+      // Update the requirement
+      if (requirement) {
+        requirement.effort = [...requirement.effort, {
+          timeCost: timeCost,
+          effortType: effortType,
+        }];
+        await project.save();
+        return res.json(project);
+      } else {
+        return res.status(404).json({ message: 'Unable to find requirement' });
+      }
+    } else {
+      return res.status(404).json({ message: 'Unable to find project' });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: 'Server error' });
+  }
+}
+
 const updateProject = async (req, res) => {
 
   try {
 
     const project = await Project.findByIdAndUpdate(req.params.id, {
-      title: req.body?.title,
-      desc: req.body?.desc,
-      risk: setRisks(req.body?.risk),
-      funcReq: setRequirement(req.body?.funcReq),
-      nonFuncReq: setRequirement(req.body?.nonFuncReq),
-      members: req.body?.members 
+      title: req.body?.title || project.title,
+      desc: req.body?.desc || project.desc,
+      risk: setRisks(req.body?.risk) || project.risk,
+      funcReq: setRequirement(req.body?.funcReq) || project.funcReq,
+      nonFuncReq: setRequirement(req.body?.nonFuncReq) || project.nonFuncReq,
+      members: req.body?.members || project.members,
     }, { new: true });
     await project.save();
 
@@ -178,5 +223,6 @@ module.exports = {
   setProject,
   getProjects,
   deleteProject,
-  updateProject
+  updateProject,
+  updateProjectEffort
 }

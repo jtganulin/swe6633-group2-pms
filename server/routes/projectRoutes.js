@@ -5,7 +5,8 @@ const {
   setProject,
   getProjects,
   deleteProject,
-  updateProject
+  updateProject,
+  updateProjectEffort
 } = require('../controllers/Project/projectController');
 const {
   protect,
@@ -17,5 +18,6 @@ router.post('/project', protect, setProject);
 router.get('/project/:id', protect, getProject);
 router.delete('/project/:id', protect, deleteProject);
 router.put('/project/:id', protect, updateProject);
+router.put('/project/:id/effort', protect, updateProjectEffort)
 
 module.exports = router;

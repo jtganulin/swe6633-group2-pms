@@ -100,6 +100,43 @@ const projectSchema = mongoose.Schema({
 
   totalEffort: totalTimeEffortSchema
 
-})
+});
+
+// On save, we want to go through all the requirements, and their nested efforts, and sum up the total time cost
+// according to the effort type
+projectSchema.pre('save', function (next) {
+  // Create a new object to store the total effort
+  const totalEffort = {
+    reqAnalysis: 0,
+    design: 0,
+    coding: 0,
+    testing: 0,
+    projectManagement: 0
+  };
+
+  // Loop through all the functional requirements
+  this.funcReq.forEach(req => {
+    // Loop through all the efforts of the requirement
+    req.effort.forEach(effort => {
+      // Add the time cost to the total effort
+      totalEffort[effort.effortType] += effort.timeCost;
+    });
+  });
+
+  // Loop through all the non-functional requirements
+  this.nonFuncReq.forEach(req => {
+    // Loop through all the efforts of the requirement
+    req.effort.forEach(effort => {
+      // Add the time cost to the total effort
+      totalEffort[effort.effortType] += effort.timeCost;
+    });
+  });
+
+  // Set the total effort to the totalEffort object
+  this.totalEffort = totalEffort;
+
+  // Call next middleware
+  next();
+});
 
 module.exports = mongoose.model('Project', projectSchema);
