@@ -129,7 +129,7 @@ export default function Register() {
             </FormControl>
             <FormControl isRequired isInvalid={!!formState.errors.role}>
                 <FormLabel>Role</FormLabel>
-                <Select name="role" id="role" value={formState.role} onChange={handleChange}>
+                <Select name="role" id="role" value={formState.role} onChange={handleChange} bg="white">
                     <option value="project-manager">Project Manager</option>
                     <option value="developer">Developer</option>
                     <option value="designer">Designer</option>

@@ -4,7 +4,7 @@ const register = async (req, res) => {
   console.log("Registering user");
   try {
     // destructure name, email, and password from req.body object
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword, role } = req.body;
 
     // check if email exists 
     const userExists = await User.findOne({ email });
@@ -26,7 +26,7 @@ const register = async (req, res) => {
       name: name,
       email: email,
       password: password,
-      role: role
+      role: role || 'designer'
     })
 
     // save user to database

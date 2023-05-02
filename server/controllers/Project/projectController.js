@@ -162,13 +162,30 @@ const updateProject = async (req, res) => {
 
   try {
 
-    const project = await Project.findByIdAndUpdate(req.params.id, {
-      title: req.body?.title || project.title,
-      desc: req.body?.desc || project.desc,
-      risk: setRisks(req.body?.risk) || project.risk,
-      funcReq: setRequirement(req.body?.funcReq) || project.funcReq,
-      nonFuncReq: setRequirement(req.body?.nonFuncReq) || project.nonFuncReq,
-      members: req.body?.members || project.members,
+    const data = {
+      title: req.body?.title,
+      desc: req.body?.desc,
+      risk: setRisks(req.body?.risk),
+      funcReq: setRequirement(req.body?.funcReq),
+      nonFuncReq: setRequirement(req.body?.nonFuncReq),
+      members: req.body?.members,
+    }
+    let project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).json({ errors: { general: 'Unable to find project' } });
+    }
+
+    // Update the project
+    project = await Project.findByIdAndUpdate(req.params.id, {
+      // Don't overwrite data if it isn't provided
+      $set: {
+        title: data.title || project.title,
+        desc: data.desc || project.desc,
+        risk: data.risk || project.risk,
+        funcReq: data.funcReq || project.funcReq,
+        nonFuncReq: data.nonFuncReq || project.nonFuncReq,
+        members: data.members || project.members,
+      }
     }, { new: true });
     await project.save();
 
