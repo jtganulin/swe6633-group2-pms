@@ -190,7 +190,7 @@ export default function Projects(props) {
             </div>
             <Box w="lg" mx="auto" p={6} my={4} border="1px solid black" borderRadius={8}>
                 {/* Output any form errors */}
-                {Object.keys(formState.errors).length > 0 && (
+                {Object.keys(formState?.errors || {})?.length > 0 && (
                     <Box>
                         {JSON.stringify(formState.errors)}
                     </Box>

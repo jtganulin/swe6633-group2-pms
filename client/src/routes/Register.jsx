@@ -74,7 +74,7 @@ export default function Register() {
                 <Text align="center" fontSize="1.5em" fontWeight="bold">Register</Text>
                 <Text>If you already have an account head to <Link style={{ color: 'blue' }} to="/login">Login</Link></Text>
             </div>
-            {Object.keys(formState.errors).length > 0 && (
+            {Object.keys(formState?.errors || {})?.length > 0 && (
                 <Alert>{JSON.stringify(formState.errors.general || formState.errors)}</Alert>
             )}
             <FormControl isRequired isInvalid={!!formState.errors.name}>
@@ -137,7 +137,7 @@ export default function Register() {
                     <option value="analyst">Analyst</option>
                 </Select>
             </FormControl>
-            {Object.keys(formState.errors).length > 0 && Object.values(formState.errors).map((error, index) => (
+            {Object.keys(formState?.errors || {})?.length > 0 && Object.values(formState.errors).map((error, index) => (
                 <FormErrorMessage key={index}>{error}</FormErrorMessage>
             ))}
             <Button mt={4} colorScheme="teal" isLoading={formState.isLoading} type="submit">

@@ -70,7 +70,8 @@ const ProjectsContainer = (props) => {
             </Box>
             <Box width={'600px'}>
               <Box backgroundColor={'#cccccc30'} borderRadius={'5px'} marginBottom={5} padding={5} display={'flex'} justifyContent={'center'}>
-                {Object.keys?.(project?.totalEffort || {})?.length > 0 ? (
+                {/* Need to make sure at least one of values in totalEffort is filled */}
+                {Object.values(project?.totalEffort)?.some?.((val) => val > 0) ? (
                   <Chart project={project} />
                 ) : (<h2>No Efforts Yet!</h2>)}
               </Box>

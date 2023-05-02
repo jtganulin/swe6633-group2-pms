@@ -4,7 +4,6 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, RadarChart, Radar, Legend, 
 
 
 const Chart = (props) => {
-
   const { project } = props;
 
   const [data, setData] = useState([
@@ -12,25 +11,25 @@ const Chart = (props) => {
       "type": "reqAnalysis",
       "name": "Requirements Analysis",
       "value": 0,
-      "fullMark": 500
+      "fullMark": 100
     },
     {
       "type": "design",
       "name": "Design",
       "value": 0,
-      "fullMark": 500
+      "fullMark": 100
     },
     {
       "type": "coding",
       "name": "Coding",
       "value": 0,
-      "fullMark": 500
+      "fullMark": 100
     },
     {
       "type": "testing",
       "name": "Testing",
       "value": 0,
-      "fullMark": 500
+      "fullMark": 100
     },
     {
       "type": "projectManagement",
@@ -63,15 +62,18 @@ const Chart = (props) => {
       <PieChart>
         <Pie data={data} nameKey="name" dataKey="value" cx="50%" cy="50%"
           outerRadius={40} fill="#8884d8" labelLine={false} labelFontSize={8}
-          label={({ name, value }) => `${value} hrs`}
-          isAnimationActive={(name, value) => value > 0}> {/* Hides labels without values */}
+          minAngle={30} label={({
+            name,
+            value,
+            percent,
+          }) => value !== 0 ? `${value}hrs` : null}> {/* Hides labels without values */}
           <Cell fill="#C19AB7" />
           <Cell fill="#9C95DC" />
           <Cell fill="#228CDB" />
           <Cell fill="#0B7189" />
           <Cell fill="#170A1C" />
         </Pie>
-        {/* <Tooltip formatter={(value, name) => `${value} hrs`} /> */}
+        <Tooltip formatter={(value, name) => `${value} hrs`} />
         <Legend />
         </PieChart>
       {/* </Box> */}

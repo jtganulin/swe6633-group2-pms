@@ -84,7 +84,7 @@ export default function Login() {
                 <Text align="center" fontSize="1.5em" fontWeight="bold">Login</Text>
                 <Text>If you don't have an account head to <Link style={{ color: 'blue' }} to="/register">Register</Link></Text>
             </div>
-            {Object.keys(formState.errors).length > 0 && (
+            {Object?.keys?.(formState?.errors || {}).length > 0 && (
                 <Alert>{formState.errors.general || JSON.stringify(formState.errors)}</Alert>
             )}
             <FormControl isRequired isInvalid={!!formState.errors.email}>
@@ -112,7 +112,7 @@ export default function Login() {
                     onChange={handleChange}
                 />
             </FormControl>
-            {Object.keys(formState.errors).length > 0 && Object.values(formState.errors).map((error) => (
+            {Object.keys?.(formState?.errors || {})?.length > 0 && Object.values(formState.errors).map((error) => (
                 <FormErrorMessage key={error}>{error}</FormErrorMessage>
             ))}
             <Button mt={4} colorScheme="teal" isLoading={formState.isLoading} type="submit">

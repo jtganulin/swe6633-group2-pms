@@ -44,7 +44,7 @@ const setProject = async (req, res) => {
   } catch (err) {
     console.log(err);
     const errors = {};
-    for (const [key, value] of Object.entries(err.errors)) {
+    for (const [key, value] of Object?.entries(err?.errors || {})) {
       errors[key] = value.message;
     }
 
@@ -102,7 +102,7 @@ const getProjects = async (req, res) => {
   } catch (err) {
     console.log(err);
     const errors = {};
-    for (const [key, value] of Object.entries(err.errors)) {
+    for (const [key, value] of Object.entries(err?.errors || {})) {
       errors[key] = value.message;
     }
 
@@ -180,7 +180,7 @@ const updateProject = async (req, res) => {
   } catch (err) {
     console.log(err);
     const errors = {};
-    for (const [key, value] of Object.entries(err.errors)) {
+    for (const [key, value] of Object?.entries(err?.errors || {})) {
       errors[key] = value.message;
     }
 
@@ -207,7 +207,7 @@ const deleteProject = async (req, res) => {
   } catch (err) {
     console.log(err);
     const errors = {};
-    for (const [key, value] of Object.entries(err.errors)) {
+    for (const [key, value] of Object.entries(err?.errors || {})) {
       errors[key] = value.message;
     }
 
