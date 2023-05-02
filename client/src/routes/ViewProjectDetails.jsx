@@ -1,4 +1,4 @@
-import { Box, VStack, FormControl, FormLabel, Heading, Input, Textarea, Button, IconButton, CloseIcon } from "@chakra-ui/react";
+import { Box, VStack, FormControl, FormLabel, Heading, Input, Textarea, Button, Text, IconButton, CloseIcon } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -7,13 +7,7 @@ function ViewProjectDetails(props) {
     const { projectId } = useParams();
     const navigate = useNavigate();
 
-
     const [formState, setFormState] = useState({});
-
-
-    const initialState = {
-
-    };
 
     useEffect(() => {
         async function fetchProjectDetails() {
@@ -68,33 +62,42 @@ function ViewProjectDetails(props) {
 
                 <FormControl isDisabled>
                     <FormLabel>Risks</FormLabel>
-                    {formState.risk?.map?.((risk, index) => (
+                    {formState?.risk?.length > 0 ? (
+                        formState.risk?.map?.((risk, index) => (
                         <VStack key={index} spacing={2} align="stretch">
                             <Input type="text" value={risk.name} bg="white" />
                             <Textarea value={risk.content} bg="white" />
                             <Input type="text" value={risk.status} bg="white" />
                         </VStack>
-                    ))}
+                    ))) : (
+                        <Text>No risks have been added to this project yet</Text>
+                    )}
                 </FormControl>
 
                 <FormControl isDisabled>
                     <FormLabel>Functional Requirements</FormLabel>
-                    {formState.funcReq?.map?.((funcReq, index) => (
+                    {formState?.funcReq?.length > 0 ? (
+                        formState.funcReq?.map?.((funcReq, index) => (
                         <VStack key={index} spacing={2} align="stretch">
                             <Input type="text" value={funcReq.name} bg="white" />
                             <Textarea value={funcReq.content} bg="white" />
                         </VStack>
-                    ))}
+                    ))) : (
+                        <Text>No functional requirements have been added to this project yet</Text>
+                    )}
                 </FormControl>
 
                 <FormControl isDisabled>
                     <FormLabel>Non-Functional Requirements</FormLabel>
-                    {formState.nonFuncReq?.map?.((nonFuncReq, index) => (
+                    {formState?.nonFuncReq?.length > 0 ? (
+                        formState?.nonFuncReq?.map?.((nonFuncReq, index) => (
                         <VStack key={index} spacing={2} align="stretch">
                             <Input type="text" value={nonFuncReq.name} bg="white" />
                             <Textarea value={nonFuncReq.content} bg="white" />
                         </VStack>
-                    ))}
+                    ))) : (
+                        <Text>No non-functional requirements have been added to this project yet</Text>
+                    )}
                 </FormControl>
                 <Button onClick={() => navigate(`/projects/${projectId}/edit`)}>Edit</Button>
                 <Link style={{ color: "blue" }} to={`/projects/${formState._id}/members`}>View Project Members</Link>

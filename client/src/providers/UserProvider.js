@@ -21,7 +21,7 @@ const UserProvider = ({ children }) => {
 
     // Logs out the user clientside; need to eventually call the serverside logout function
     const logout = async (e) => {
-        const stateReset = Object.keys(user).reduce((acc, v) => ({ ...acc, [v]: undefined }), {});
+        const stateReset = Object?.keys?.(user).reduce((acc, v) => ({ ...acc, [v]: undefined }), {});
         setUser({ ...stateReset, ...getInitialState() });
         await axios.post("/api/users/logout");
         navigate("/login");
