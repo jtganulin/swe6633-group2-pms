@@ -28,7 +28,7 @@ export default function ViewAllProjects(props) {
       }
     };
     getProjects();
-  }, []);
+  }, [user.sentinel]);
 
 
   return (
@@ -111,6 +111,7 @@ const EffortModal = (props) => {
 }
 
 const EffortForm = (props) => {
+  const { user, updateUser } = useContext(UserContext);
   const [formState, setFormState] = useState({
     // forProject: props?.projectId,
     reqId: '',
@@ -118,13 +119,15 @@ const EffortForm = (props) => {
     timeCost: 0,
   });
 
-  const { projectId, funcReq, nonFuncReq } = props;
+  const { projectId } = props;
+  const { funcReq, nonFuncReq } = user?.projects?.find?.((project) => project?._id === projectId) || {};
 
   const submit = async (e) => {
     e?.preventDefault?.();
     try {
       await axios.put(`/api/project/${projectId}/effort`, formState);
       toast.success('Effort Added!');
+      updateUser({ sentinel: Date.now() });
     } catch (error) {
       console.log(JSON.stringify(error));
       toast.error('Error adding effort.');
